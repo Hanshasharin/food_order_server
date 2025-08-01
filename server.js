@@ -1,11 +1,37 @@
-const express = require('express')
-const app = express()
-const port = 3000
-app.get("/",(req,res)=>{
-    res.send("<h1>food order</h1>")
-})
+const express = require('express');
+const mongoose = require('mongoose');
+const cookieParser = require('cookie-parser');
+require('dotenv').config();
 
-app.listen (port,()=>{
-    console.log("server running");
-    
-})
+const app = express();
+const port = process.env.PORT;
+const userRouter = require('./src/routers/userRouter');
+const adminRouter = require('./src/routers/adminRouter');
+const hotelRouter = require('./src/routers/hotelRouter');
+const foodRouter = require('./src/routers/foodRouter')
+const dbConnectionLink = process.env.DB_CONNECTION_LINK;
+
+// Middlewares
+app.use(cookieParser());
+app.use(express.json()); // ✅ This must come before routes
+
+// Routes
+app.use("/api/user", userRouter);
+app.use("/api/admin", adminRouter);
+app.use("/api/hotel", hotelRouter);
+app.use("/api/food", foodRouter);
+
+
+
+// DB Connection
+mongoose.connect(dbConnectionLink)
+  .then(() => console.log("DB connected"))
+  .catch(err => console.error("DB connection error:", err));
+
+app.get("/", (req, res) => {
+  res.send("<h1>gym</h1>");
+});
+
+app.listen(port, () => {
+  console.log(`Server running on ${port}...`);
+});

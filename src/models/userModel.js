@@ -1,10 +1,7 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
-     name:{
-      type:String,
-      required: [true, "name is required"],
-    },
+  
     email: {
       type: String,
       required: [true, "email is required"],
@@ -20,14 +17,21 @@ const userSchema = new mongoose.Schema(
     profile_pic: {
       type: String,
       trim: true,
+            required: [true, "profile pic required" ],
+
     },
     role: {
       type: String,
       required: true,
-      enum: ["admin", "hotel_owner", "customer"],
-      default: "customer",
+      enum: ["admin", "hotel_owner", "user"],
+      default: "user",
     },
-    
+    phone: {
+      type: String,
+      required: [true, "phone num requird"],
+      minlength: [10, "number should me atleast 10 characters"],
+      maxlength: [15, "number should not exeed 15"],
+    },
     personal_detail: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "personalDetails",

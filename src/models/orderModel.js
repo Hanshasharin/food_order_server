@@ -22,6 +22,10 @@ const orderSchema = new mongoose.Schema(
       required: [true, "mandatory"],
       default: Date.now,
     },
+    offer:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"offer"
+    },
 status: {
       type: String,
       enum: ["pending", "success"],
