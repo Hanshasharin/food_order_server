@@ -32,11 +32,16 @@ const userSchema = new mongoose.Schema(
       minlength: [10, "number should me atleast 10 characters"],
       maxlength: [15, "number should not exeed 15"],
     },
-    personal_detail: {
+    personal_details: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "personalDetails",
     },
-    
+    status: {
+        type: String,
+        required: [true, "Status is required"],
+        enum: ["active", "inactive"],
+        default: "active"
+    }
 
   },
   {

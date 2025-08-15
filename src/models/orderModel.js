@@ -7,11 +7,20 @@ const orderSchema = new mongoose.Schema(
       ref: "user",
       required: [true, "mandatory"],
     },
-     food_item: [{
+     items: [
+  {
+    foodItem: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "food",
-      required: [true, "mandatory"],
-    }],
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 1
+    }
+  }
+],
     hotel:{
      type: mongoose.Schema.Types.ObjectId,
       ref: "hotel",

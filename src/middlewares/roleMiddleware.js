@@ -1,31 +1,44 @@
-// const adminOnlyMiddleware = (req, res, next) => {
-//   if (!req.user) {
-//     return res.status(401).json({ message: "Unauthorized: User not authenticated" });
-//   }
 
-//   if (req.user.role !== "admin") {
-//     return res.status(403).json({ message: "Forbidden: Admins only" });
-//   }
+// const roleMiddleware = (...allowedRoles) => {
+//   return (req, res, next) => {
+//     if (!req.user) {
+//       return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+//     }
 
-//   next(); // user is admin, proceed
+//     if (!allowedRoles.includes(req.user.role)) {
+//       return res.status(403).json({ message: "Forbidden: Access denied" });
+//     }
+
+//     next();
+//   };
 // };
 
-// module.exports = adminOnlyMiddleware;
+// module.exports = roleMiddleware;
 
 
-// roleMiddleware.js
-const roleMiddleware = (...allowedRoles) => {
-  return (req, res, next) => {
-    if (!req.user) {
-      return res.status(401).json({ message: "Unauthorized: User not authenticated" });
+const adminOnlyMiddleware = (req, res, next) => {
+    if (req.user.role === "admin"){
+        next()
+    }else{
+        return res.status(401).json({message: "User is not admin"})
     }
+  
+}
 
-    if (!allowedRoles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Forbidden: Access denied" });
+const hotelOwnerOnlyMiddleware = (req, res, next) => {
+    if (req.user.role === "hotel_owner"){
+        next()
+    }else{
+        return res.status(401).json({message: "User is not a hotel owner"})
     }
+}
 
-    next();
-  };
-};
+const userOnlyMiddleware = (req, res, next) => {
+    if (req.user){
+        next()
+    }else{
+        return res.status(401).json({message: "User not logged in"})
+    }
+}
 
-module.exports = roleMiddleware;
+module.exports = {adminOnlyMiddleware, hotelOwnerOnlyMiddleware, userOnlyMiddleware}

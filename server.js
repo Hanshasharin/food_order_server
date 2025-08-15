@@ -8,7 +8,7 @@ const port = process.env.PORT;
 const userRouter = require('./src/routers/userRouter');
 const adminRouter = require('./src/routers/adminRouter');
 const hotelRouter = require('./src/routers/hotelRouter');
-const foodRouter = require('./src/routers/foodRouter')
+
 const dbConnectionLink = process.env.DB_CONNECTION_LINK;
 
 // Middlewares
@@ -19,7 +19,7 @@ app.use(express.json()); // ✅ This must come before routes
 app.use("/api/user", userRouter);
 app.use("/api/admin", adminRouter);
 app.use("/api/hotel", hotelRouter);
-app.use("/api/food", foodRouter);
+
 
 
 

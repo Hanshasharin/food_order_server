@@ -10,9 +10,9 @@ const offerSchema = new mongoose.Schema(
 
 
     validity: {
-      type: Number,
+      type: Date,
       required: [true, "mandatory"],
-      min: [1, "offer validity must be at least one month"],
+      // min: [1, "offer validity must be at least one month"],
     },
 
      status: {
