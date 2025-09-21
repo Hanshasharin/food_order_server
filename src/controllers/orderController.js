@@ -63,8 +63,8 @@ const orderFoodController = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `https://food-order-client-eftri1m6p-hansha-sharins-projects.vercel.app/order-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `https://food-order-client-eftri1m6p-hansha-sharins-projects.vercel.app/order-cancel`,
+      success_url: `https://food-order-client-6ad269uuq-hansha-sharins-projects.vercel.app/order-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `https://food-order-client-6ad269uuq-hansha-sharins-projects.vercel.app/order-cancel`,
     });
 
     // Save pending order

@@ -9,7 +9,7 @@ require('dotenv').config();
     origin : process.env.CLIENT_URL,
     origin: [
       process.env.CLIENT_URL,
-      "https://food-order-client-eftri1m6p-hansha-sharins-projects.vercel.app", // ✅ new frontend
+      "https://food-order-client-6ad269uuq-hansha-sharins-projects.vercel.app"
     ],
     
 optionSuccessStatus:200,
