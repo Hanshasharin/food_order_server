@@ -7,7 +7,10 @@ const app = express();
 require('dotenv').config();
  var corsOptions = {
     origin : process.env.CLIENT_URL,
-    
+    origin: [
+      process.env.CLIENT_URL,
+      "https://food-order-client-eftri1m6p-hansha-sharins-projects.vercel.app", // ✅ new frontend
+    ],
     
 optionSuccessStatus:200,
 credentials:true
