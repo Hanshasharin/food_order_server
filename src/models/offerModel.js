@@ -33,6 +33,7 @@ const offerSchema = new mongoose.Schema(
       required: [true, "discount is requird"],
       
     },
+    
   },
   {
     timestamps: true,

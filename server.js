@@ -1,9 +1,19 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
-require('dotenv').config();
-
+var cors = require('cors')
 const app = express();
+
+require('dotenv').config();
+ var corsOptions = {
+    origin : process.env.CLIENT_URL,
+    
+    
+optionSuccessStatus:200,
+credentials:true
+ }
+ app.use(cors(corsOptions))
+
 const port = process.env.PORT;
 const userRouter = require('./src/routers/userRouter');
 const adminRouter = require('./src/routers/adminRouter');

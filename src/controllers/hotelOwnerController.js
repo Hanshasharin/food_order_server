@@ -7,6 +7,9 @@ const createHotelController = async (req, res) => {
     try {
         const data = req.body;
         data.hotel_owner = req.user._id;
+          if (req.file) {
+      data.hotel_image = req.file.path;  // <-- cloudinary URL here
+    }
         const hotel = await hotelModel.create(data);
         await hotel.populate("hotel_owner");
         res.json({ message: "Hotel created successfully", hotel });
@@ -26,14 +29,26 @@ const hotelListController = async (req, res) => {
         const hotelList = await hotelModel.find({ hotel_owner: user._id });
         res.json({ message: "Hotel List fetched successfully", hotelList , user});
     } catch (err) {
-        res.status(500).json({ message: "Something went wrong in the server. Please try after some time." });
+         if (err.name === "ValidationError") {
+            const message = getValidationErrorMessage(err);
+            res.status(400).json({ message });
+        } else {
+            res.status(500).json({ message: "Something went wrong in the server. Please try after some time." });
+        }
+    
     }
 };
 
 
 const createFoodItemsController = async (req, res) => {
     try {
-        const foodItem = await foodModel.create(req.body);
+      
+      const imageUrl = req.file?.path;
+        const foodItem = await foodModel.create({
+      ...req.body,
+      image: imageUrl, // save uploaded image URL here
+    });
+
         const hotel = await hotelModel.findById(req.body.hotelID);
 
         if (!hotel) return res.status(404).json({ message: "Hotel not found" });
@@ -57,7 +72,16 @@ const listFoodItemsInHotelController = async (req, res) => {
   try {
     const { hotelId } = req.params;
 
-    const hotel = await hotelModel.findById(hotelId).populate("food");
+    // const hotel = await hotelModel.findById(hotelId).populate("food");
+const hotel = await hotelModel
+  .findById(hotelId)
+  .populate({
+    path: "food",
+    populate: {
+      path: "offer",
+      model: "offer",
+    },
+  });
 
     if (!hotel) {
       return res.status(404).json({ message: "Hotel not found" });
@@ -68,17 +92,57 @@ const listFoodItemsInHotelController = async (req, res) => {
       foodItems: hotel.food,
     });
   } catch (err) {
-    res.status(500).json({
-      message: "Something went wrong while fetching food items",
-    });
+  if (err.name === "ValidationError") {
+            const message = getValidationErrorMessage(err);
+            res.status(400).json({ message });
+        } else {
+            res.status(500).json({ message: "Something went wrong in the server. Please try after some time." });
+        }
+    
   }
 };
 
 
+
+
+const getFoodsWithActiveOffers = async (req, res) => {
+  try {
+    const foodWithActiveOffers = await foodModel
+      .find()
+      .populate({
+        path: "offer",
+        match: { status: "active", validity: { $gte: new Date() } }, // only active & valid offers
+      });
+// / Filter out foods with no active offer
+    let activeFoods = foodWithActiveOffers.filter(food => food.offer);
+
+    // Sort by offer creation date (latest first) and take only 3
+    activeFoods = activeFoods
+      .sort((a, b) => new Date(b.offer.createdAt) - new Date(a.offer.createdAt))
+      .slice(0, 3);
+    // Filter out foods with no active offer
+    // const activeFoods = foodWithActiveOffers.filter(food => food.offer);
+
+    res.json({
+      message: "Active offers fetched successfully",
+      foods: activeFoods,
+      
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Something went wrong while fetching offers" });
+  }
+};
+
+
+
 const createOfferController = async (req, res) => {
     try {
+      
         const offer = await offerModel.create(req.body);
         const food = await foodModel.findById(req.body.foodID);
+        
+// const food = await foodModel.find({ hotel: hotelId }).populate('offer');
 
         if (!food) return res.status(404).json({ message: "Food item not found" });
 
@@ -132,5 +196,6 @@ module.exports = {
     createOfferController,
     hotelListController,
     listFoodItemsInHotelController,
-    deleteFoodController
+    deleteFoodController,
+    getFoodsWithActiveOffers
 };

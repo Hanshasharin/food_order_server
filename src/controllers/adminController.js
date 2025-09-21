@@ -41,15 +41,23 @@ const updateRoleController = async (req, res) => {
         }
     }
 }
+
 const toggleUserStatus = async (req, res) => {
-    const user = await UserModel.findById(req.query.userID)
-    if(user.status === "active"){
-        user.status = "inactive"
-    }else{
-        user.status = "active"
+  try {
+    const { userID } = req.body;
+    const user = await UserModel.findById(userID);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
-    await user.save()
-    res.json({message: "User status updated successfully", user})
-}
+
+    user.status = user.status === "active" ? "inactive" : "active";
+    await user.save();
+
+    res.json({ message: "User status updated successfully", user });
+  } catch (err) {
+    res.status(500).json({ message: "Something went wrong", error: err.message });
+  }
+};
 
 module.exports = {updateRoleController, userListController, toggleUserStatus}

@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const personalDetailSchema = new mongoose.Schema(
   {
-     name:{
+     fullName:{
       type:String,
       required: [true, "name is required"],
     },
@@ -13,7 +13,16 @@ const personalDetailSchema = new mongoose.Schema(
       required: [true, "mandatory"],
       maxlength: [500, "should not exceed 500 character"],
     },
-    
+    alternateAddress: {
+      type: String,
+      maxlength: [500, "should not exceed 500 character"],
+    },
+    specialInstructions: {
+      type: String,
+      maxlength: [300, "Special instructions should not exceed 300 characters"],
+      trim: true,
+      default: '',
+    },
       orders: [
       {
         type: mongoose.Schema.Types.ObjectId,

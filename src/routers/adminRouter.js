@@ -9,7 +9,7 @@ const router = express.Router()
 router.put('/update-role',authMiddleware,adminOnlyMiddleware, updateRoleController)
 router.get('/user-list', authMiddleware,adminOnlyMiddleware,userListController)
 
-router.get('/update-status',authMiddleware, adminOnlyMiddleware,toggleUserStatus)
+router.put('/update-status',authMiddleware, adminOnlyMiddleware,toggleUserStatus)
 
 
 

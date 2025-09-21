@@ -21,6 +21,12 @@ const hotelSchema = new mongoose.Schema(
       type: String,
       required: [true, "mandatory"],
     },
+    type: {
+  type: String,
+  enum: ['Veg', 'Non-Veg', 'Both'],
+  required: [true, 'Please specify hotel type'],
+  default: 'Both', // optional default value
+},
     hotel_owner: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",

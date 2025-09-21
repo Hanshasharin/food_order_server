@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
   {
+    
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
@@ -37,13 +38,17 @@ const orderSchema = new mongoose.Schema(
     },
 status: {
       type: String,
-      enum: ["pending", "success"],
+      enum: ["pending", "success","refund","cancel"],
       default: "pending"
     },
     total: {
       type: Number,
       required: [true, "mandatory"],
-    }
+    },
+     stripeSessionId: {  // <--- Add this field
+      type: String,
+      required: true,
+    },
    
   },
   {
